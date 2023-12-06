@@ -35,17 +35,20 @@ function Exibir_Tela(){
     Inputs.appendChild(Input_Numero)
     telaEscura.appendChild(telPrincipal)
     body.appendChild(telaEscura)
-    console.log("edddS");
 }
 
 btn_Adicionar.onclick=()=>{
     const tr=document.createElement("tr")
+    const btn_editar = document.createElement('button')
+    btn_editar.innerText = 'Editar'
+    btn_editar.addEventListener('click' , editar())
+
 
     tr.innerHTML=`
     <td>${Input_Nome.value}</td>
     <td>${Input_Numero.value}</td>
-    <td><button>Editar</button></td>
-    <td><button>Eliminar</button></td>
+    <td></td>
+    <td></td>
     `
     tabela.appendChild(tr)
     
@@ -59,4 +62,8 @@ btn_Adicionar.onclick=()=>{
     Input_Nome.value=""
     Input_Numero.value=""
 
+}
+
+function editar() {
+     console.log('editou...');
 }
