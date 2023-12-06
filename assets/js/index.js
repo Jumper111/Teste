@@ -1,7 +1,8 @@
 const body=document.getElementById("body")
 const tabela=document.querySelector(".tabela")
-const contactos=[]
-let contador=0
+
+let local= JSON.parse(localStorage.getItem("Contactos")) || []
+let contador=Math.floor(Math.random() * 1000)
 
 let telaEscura= document.createElement("div")
 let telPrincipal= document.createElement("div")
@@ -28,10 +29,10 @@ telaEscura.className="tela_escura"
 telPrincipal.className="tela_add"
 Inputs.className="inputs"
 
-
 /**Fazer aparecer a tela de adicionar */
 
 function Exibir_Tela(){
+   
     telaEscura.setAttribute("style","display:flex")
 
     telPrincipal.appendChild(h3)
@@ -42,38 +43,57 @@ function Exibir_Tela(){
     telaEscura.appendChild(telPrincipal)
     body.appendChild(telaEscura)
 
+}   
+
+/**Apresentar */
+
+function Ready(){
+    
+    local.forEach(e => {
+        const tr=document.createElement("tr")
+        tr.id=e.id
+        tr.innerHTML=`
+        <td>${e.nome}</td>
+        <td>${e.numero}</td>
+        <td><button onClick=Editar()>Editar</button><button onClick= Eliminar(event)>Eliminar</button></td>
+    
+    ` 
+    tabela.appendChild(tr)
+    console.log(tr.id);
+});
+   
 }
 
 /**Cadastrar contacto novo */
-
 btn_Adicionar.onclick=()=>{
-    const tr=document.createElement("tr")
-    contador++;
-    tr.id=contador
 
-    tr.innerHTML=`
-    <td>${Input_Nome.value}</td>
-    <td>${Input_Numero.value}</td>
-    <td><button onClick=Editar()>Editar</button></td>
-    <td><button onClick= Eliminar(${contador})>Eliminar</button></td>
-    `
-    tabela.appendChild(tr)
-    
-    contactos.push({
+    if(Input_Nome.value != "" && Input_Numero.value != "" ){
+    local.push({
+        id:contador,
         nome:Input_Nome.value,
         numero:Input_Numero.value
     })
 
-    localStorage.setItem("Contactos",JSON.stringify(contactos))
-    telaEscura.setAttribute("style","display:none")
-    Input_Nome.value=""
-    Input_Numero.value=""
-
+    localStorage.setItem("Contactos",JSON.stringify(local));
+    location.reload();
+    }else{
+        alert("Preencha os campos")
+    }
 }
 
 /**Eliminar */
-function Eliminar(id){
-    let tr=document.getElementById(id)
-    tr.remove()
+function Eliminar({target}){
+   let id = target.closest("tr").getAttribute("id")    
+   let tr=document.getElementById(id)
+  
+
+   let newLocal = local.filter((contacto)=>(
+        contacto.id != id
+   ))
+    localStorage.setItem("Contactos",JSON.stringify(newLocal))
+    location.reload()
 }
+Ready()
+
+/**Validando se  */
 
